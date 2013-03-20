@@ -4,23 +4,21 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import projecten2.*;
 
         
-public abstract class MeldingTest implements ActionListener{
-    
-    private static String[] types = {"Gevaarlijke Omstandigheden", "Problemen met het Wegdek", "Vervuiling", "Andere"};
+public abstract class SituatieLezenTest implements ActionListener{
     
     public static void main(String[] args){
-        JLabel idMeldingLbl = new JLabel("idMelding: ")      ;
-        final JTextField idMeldingTxt = new JTextField(20);
-        JLabel titelLbl = new JLabel("Titel: ");
-        final JTextField titelTxt = new JTextField(20);
-        JLabel typeLbl = new JLabel("Type: ");
-        final JComboBox typeCBox = new JComboBox(types);
-        //typeCBox.setModel(new DefaultComboBoxModel(SType.values()));
-        JLabel omschrijvingLbl = new JLabel("Omschrijving: ");
-        final JTextArea omschrijvingTArea = new JTextArea(5, 20);
-        JButton toevoegenBtn = new JButton("Toevoegen");
+                
+        
+        JLabel situatieLbl = new JLabel("Situaties: ");
+        final JTextArea situatieTArea = new JTextArea(10, 20);
+        JButton opvragenBtn = new JButton("Situatie opvragen");
         
         
         JPanel pane = new JPanel();
@@ -34,16 +32,16 @@ public abstract class MeldingTest implements ActionListener{
         c.weightx = 0;
         c.weighty = 0;
         c.fill = GridBagConstraints.NONE;
-        pane.add(titelLbl, c);
+        pane.add(situatieLbl, c);
         
         c.gridx = 1;
         c.gridy = 0;
         c.weightx = 1;
         c.weighty = 0;
         c.fill = GridBagConstraints.HORIZONTAL;
-        pane.add(titelTxt, c);
+        pane.add(opvragenBtn, c);
         
-        c.gridx = 0;
+        /*c.gridx = 0;
         c.gridy = 1;
         c.weightx = 0;
         c.weighty = 0;
@@ -79,6 +77,7 @@ public abstract class MeldingTest implements ActionListener{
         c.weighty = 0;
         c.fill = GridBagConstraints.NONE;
         pane.add(toevoegenBtn, c);
+        * */
         
         JFrame frame = new JFrame("Situatie");
         frame.setContentPane(pane);
@@ -86,12 +85,24 @@ public abstract class MeldingTest implements ActionListener{
         frame.setVisible(true);
         frame.pack();
            
-        toevoegenBtn.addActionListener(new ActionListener() {
+        opvragenBtn.addActionListener(new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                DBConnectie connectie = new DBConnectie();
-                connectie.connectDB();
+                Situatie situatie = new Situatie();
+                
+               
+  
+                System.out.println("opgevraagde situaties:");
+                
+               DBConnectie connectie = new DBConnectie();
+               //situatieTArea.setText(connectie.situatieOpvragen() + "\n");
+               /* try {
+                 connectie.situatieOpvragen();
+                    
+                } catch (SQLException ex) {
+                    Logger.getLogger(SituatieLezenTest.class.getName()).log(Level.SEVERE, null, ex);
+                }*/
                 
             }  
 

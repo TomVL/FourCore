@@ -2,19 +2,46 @@ package projecten2;
 
 
 public class Event extends Melding{
-    
+    private int meldingId;
+    private Gebruiker gebruiker;
     private String titel;
     private String datum;
     private String tijdstip;
-    private EType type;
+    private String locatie;
+    private String type;
     private String omschrijving;
+    private int afbeeldingId;
     
-    public Event(String titel, String datum, String tijdstip, EType type, String omschrijving){
+    public Event(int eventId, Gebruiker gebruiker, String titel, String datum, 
+            String tijdstip, String locatie, String type, String omschrijving){
+	this.meldingId = eventId;
+        this.gebruiker = gebruiker;
         this.titel = titel;
         this.datum = datum;
         this.tijdstip = tijdstip;
+        this.locatie = locatie;
         this.type = type;
         this.omschrijving = omschrijving;
+    }
+
+    public Event() {
+        this(0, new Gebruiker(), "Geen titel","","","","Andere","Geen omschrijving");
+    }
+
+    public int getMeldingId() {
+        return meldingId;
+    }
+
+    public void setMeldingId(int eventId){
+        this.meldingId = eventId;
+    }
+    
+    public Gebruiker getGebruiker(){
+        return gebruiker;
+    }
+    
+    public void setGebruiker(Gebruiker gebruiker){
+        this.gebruiker = gebruiker;
     }
     
     public String getTitel(){
@@ -41,11 +68,19 @@ public class Event extends Melding{
         this.tijdstip = tijdstip;
     }
     
-    public String getType(){
-        return type.toString();
+    public String getLocatie(){
+        return locatie;
     }
     
-    public void setType(EType type){
+    public void setLocatie(String locatie){
+        this.locatie = locatie;
+    }
+    
+    public String getType(){
+        return type;
+    }
+    
+    public void setType(String type){
         this.type = type;
     }
     
@@ -55,5 +90,13 @@ public class Event extends Melding{
     
     public void setOmschrijving(String omschrijving){
         this.omschrijving = omschrijving;
+    }
+    
+    public int getAfbeeldingId(){
+        return afbeeldingId;
+    }
+    
+    public void setAfbeeldingId(int afbeeldingId){
+        this.afbeeldingId = afbeeldingId;
     }
 }
