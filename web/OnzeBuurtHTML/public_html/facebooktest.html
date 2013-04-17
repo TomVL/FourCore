@@ -1,0 +1,201 @@
+<!doctype html>
+<!--[if lt IE 7]> <html class="ie6 oldie"> <![endif]-->
+<!--[if IE 7]>    <html class="ie7 oldie"> <![endif]-->
+<!--[if IE 8]>    <html class="ie8 oldie"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:fb="http://www.facebook.com/2008/fbml">
+<!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html";/>
+<title>Home | Onze Buurt</title>
+<!-- 
+To learn more about the conditional comments around the html tags at the top of the file:
+paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/
+
+Do the following if you're using your customized build of modernizr (http://www.modernizr.com/):
+* insert the link to your js here
+* remove the link below to the html5shiv
+* add the "no-js" class to the html tags at the top
+* you can also remove the link to respond.min.js if you included the MQ Polyfill in your modernizr build 
+-->
+<!--[if lt IE 9]>
+<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<script src="respond.min.js"></script>
+</head>
+<body>
+<div class="gridContainer clearfix">
+<html xmlns:fb="https://www.facebook.com/2008/fbml">
+
+<div id="fb-root" class=" fb_reset">
+<script type="text/javascript">
+var button;
+var userInfo;
+window.fbAsyncInit = function() {
+FB.init({ appId: '162222763936914',
+status: true,
+cookie: true,
+xfbml: true,
+oauth: true});
+showLoader(true);
+function updateButton(response) {
+button = document.getElementById('fb-auth');
+userInfo = document.getElementById('user-info');
+if (response.authResponse) {
+//user is already logged in and connected
+FB.api('/me', function(info) {
+login(response, info);
+});
+button.onclick = function() {
+FB.logout(function(response) {
+logout(response);
+});
+};
+} else {
+//user is not connected to your app or logged out
+button.innerHTML = 'Login';
+button.onclick = function() {
+showLoader(true);
+FB.login(function(response) {
+if (response.authResponse) {
+FB.api('/me', function(info) {
+login(response, info);
+});
+} else {
+//user cancelled login or did not grant authorization
+showLoader(false);
+}
+}, {scope:'email,user_birthday,status_update,publish_stream,user_about_me'});
+}
+}
+}
+// run once with current status and whenever the status changes
+FB.getLoginStatus(updateButton);
+FB.Event.subscribe('auth.statusChange', updateButton);
+};
+(function() {
+var e = document.createElement('script'); e.async = true;
+e.src = document.location.protocol
++ '//connect.facebook.net/en_US/all.js';
+document.getElementById('fb-root').appendChild(e);
+}());
+function login(response, info){
+if (response.authResponse) {
+var accessToken = response.authResponse.accessToken;
+userInfo.innerHTML = '<img src="https://graph.facebook.com/' + info.id + '/picture">' + info.name
++ "<br /> Your Access Token: " + accessToken;
+button.innerHTML = 'Logout';
+showLoader(false);
+document.getElementById('other').style.display = "block";
+}
+}
+function logout(response){
+userInfo.innerHTML = "";
+document.getElementById('debug').innerHTML = "";
+document.getElementById('other').style.display = "none";
+showLoader(false);
+}
+//stream publish method
+function streamPublish(name, description, hrefTitle, hrefLink, userPrompt){
+showLoader(true);
+FB.ui(
+{
+method: 'stream.publish',
+message: '',
+attachment: {
+name: name,
+caption: '',
+description: (description),
+href: hrefLink
+},
+action_links: [
+{ text: hrefTitle, href: hrefLink }
+],
+user_prompt_message: userPrompt
+},
+function(response) {
+showLoader(false);
+});
+}
+function showStream(){
+FB.api('/me', function(response) {
+//console.log(response.id);
+streamPublish(response.name, 'Stream upload test', 'hrefTitle', 'http://webs.hogent.be/matthiasseghers/', "Share thinkdiff.net");
+});
+}
+function share(){
+showLoader(true);
+var share = {
+method: 'stream.share',
+u: 'http://thinkdiff.net/'
+};
+FB.ui(share, function(response) {
+showLoader(false);
+console.log(response);
+});
+}
+function graphStreamPublish(){
+showLoader(true);
+FB.api('/me/feed', 'post',
+{
+message : "Test van post gebruik makend van onze buurt",
+link : 'http://webs.hogent.be/matthiasseghers',
+picture : '',
+name : 'Onze Buurt',
+description : 'Samen werken aan een betere omgeving'
+},
+function(response) {
+showLoader(false);
+if (!response || response.error) {
+alert('Error occured');
+} else {
+alert('Post ID: ' + response.id);
+}
+});
+}
+function fqlQuery(){
+showLoader(true);
+FB.api('/me', function(response) {
+showLoader(false);
+//http://developers.facebook.com/docs/reference/fql/user/
+var query = FB.Data.query('select name, contact_email, profile_url, sex, pic_small from user where uid={0}', response.id);
+query.wait(function(rows) {
+document.getElementById('debug').innerHTML =
+'FQL Information: '+ "<br />" +
+'Naam (voornaam + achternaam): ' + rows[0].name + "<br />" +
+'Email: ' + (rows[0].contact_email!= undefined ? rows[0].contact_email : "") + "<br />"+
+'Geslacht: ' + (rows[0].sex!= undefined ? rows[0].sex : "") + "<br />" +
+'Your Profile: ' + "<a href='" + rows[0].profile_url + "'>" + rows[0].profile_url + "</a>" + "<br />" +
+'<img src="' + rows[0].pic_small + '" alt="" />' + "<br />";
+});
+});
+}
+function setStatus(){
+showLoader(true);
+status1 = document.getElementById('status').value;
+FB.api(
+{
+method: 'status.set',
+status: status1
+},
+function(response) {
+if (response == 0){
+alert('Your facebook status not updated. Give Status Update Permission.');
+}
+else{
+alert('Your facebook status updated');
+}
+showLoader(false);
+}
+);
+}
+function showLoader(status){
+if (status)
+document.getElementById('loader').style.display = 'block';
+else
+document.getElementById('loader').style.display = 'none';
+}
+</script>
+</html>

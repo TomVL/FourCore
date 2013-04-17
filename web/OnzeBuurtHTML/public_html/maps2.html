@@ -1,0 +1,105 @@
+<!doctype html>
+<!--[if lt IE 7]> <html class="ie6 oldie"> <![endif]-->
+<!--[if IE 7]>    <html class="ie7 oldie"> <![endif]-->
+<!--[if IE 8]>    <html class="ie8 oldie"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="">
+<!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mijn Buurt | Onze Buurt</title>
+<link href="boilerplate.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="css/main.css">
+<link rel="stylesheet" type="text/css" href="css/formulier.css">
+<link rel="stylesheet" type="text/css" href="css/dropUpMenu.css">
+<!-- 
+To learn more about the conditional comments around the html tags at the top of the file:
+paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/
+
+Do the following if you're using your customized build of modernizr (http://www.modernizr.com/):
+* insert the link to your js here
+* remove the link below to the html5shiv
+* add the "no-js" class to the html tags at the top
+* you can also remove the link to respond.min.js if you included the MQ Polyfill in your modernizr build 
+-->
+<!--[if lt IE 9]>
+<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+ <script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?libraries=placeskey=AIzaSyAuALa_Z4coDfwtE-Hm2ItYNjFNTYKiTCk&sensor=true">
+    </script>
+
+<script src="respond.min.js"></script>
+<script src="javascriptje2.js"></script>
+
+</head>
+<!--AIzaSyCjEo17JpqymdjvqU2e11hQm2BGkI1I6eg-->
+<body>
+<div class="gridContainer clearfix">
+ <!-- <header>
+    <f1 > Mijn Buurt </f1>
+  </header>-->
+  <div id="side-bar">
+    <button class="vindmij" onClick="location.href='index.html'">Terug</button>
+    <button class="vindmij" onclick="location.href='#'">Meldingen</button>
+    <button class="vindmij" onclick="">Events</button>
+    <button class="vindmij" onclick="">Situaties</button>
+    <button class="vindmij" onclick="">Overzicht</button>
+    <input id="autocomplete" type="text" placeholder="Geef locatie" autocomplete="on">
+    
+    <!--<button class="submit" type="submit">GO</button>-->
+    
+    <button class="vindmij" onclick="getLocation()">Vind mij</button>
+	<input id="latFld" placeholder="Latitude" type="text">
+	<input id="lngFld" placeholder="Longitude"type="text">
+	
+    <table width="100%" border="1" cellpadding="1">
+      <tr>
+        <td><img class="placeIcon" src="images/smallEvent.png" alt="event"></td>
+        <td class="tdtext">Event feestje</td>
+      </tr>
+      <tr>
+        <td id="title1"><img class="placeIcon" src="images/smallSituatie.png" alt="event"></td>
+        <td class="tdtext">Situatie ongeval</td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+      <tr>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+  </div>
+  <div id="bottom-bar">
+    <input id="autocomplete" name="auto" type="text" placeholder="Geef locatie" autocomplete="on">
+    </div>
+  <div id="mapcanvas"></div>
+
+<!-- Start dropUpMenu -->
+<div id="dropUpMenu">
+<ul id="css3menu1" class="topmenu">
+	<li class="topfirst"><a href="#" >Overzicht</a>
+    <ul>
+		<li class="subfirst"><a href="#">Events</a></li>
+		<li><a href="#">Situaties</a></li>
+	</ul></li>
+	<li class="topmenu"><a href="index.html" ><span>Home</span></a></li>
+	<li class="toplast"  onclick="getLocation()"><a href="#">Vind mij</a></li>
+</ul>
+</div>
+<!-- End dropUpMenu -->
+
+  <!-- <footer>
+    <f1> Fourcore </f1>
+  </footer>
+  <div id="value" </div>--> 
+</div>
+</body>
+</html>
