@@ -49,7 +49,18 @@ img, object, embed, video {
 	width:90px;
 	height:130px; 
 	padding:0px 5px 5px 0px;
-	float:left;"
+	float:left;
+}
+#melding{
+
+	float: left;
+	margin-left: 0;
+	width: 100%;
+        font-size: 32px;
+	height: 100%;
+        text-align: center;
+        
+            
 }
 #contentIndex {
 	clear: both;
@@ -193,6 +204,11 @@ html {
 	height: 100%;
 }
 
+#eventItem{
+        font-weight:bold;
+	font-family:Arial, Helvetica, sans-serif;
+	color:#FFF;
+	border-bottom-color: inherit;	
 }
 
 /* Tablet Layout: 481px to 768px. Inherits styles from: Mobile Layout. */

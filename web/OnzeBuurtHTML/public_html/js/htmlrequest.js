@@ -106,7 +106,7 @@ function selectGroupAndLoadReminders(groupIndex, selectedReminderId) {
 
     // Load the reminders in this group from the back-end.
     var request = new XMLHttpRequest();
-    request.open("GET", BASE_URL + "/groups/" + groups[selectedGroupIndex].id + "/reminders");
+    request.open("GET", BASE_URL + "/onzebuurt/" + groups[selectedGroupIndex].id + "/");
     request.onload = function() {
         if (request.status === 200) {
             reminders = JSON.parse(request.responseText);
@@ -130,3 +130,109 @@ function selectGroupAndLoadReminders(groupIndex, selectedReminderId) {
     };
     request.send(null);
 }
+function createGroupFromInput() {
+    
+    var group = {};
+    group.title = jQuery.trim($("#groupTitle").val());
+    
+    if (group.title.length < 1) {
+        $("#groupDialog .alert-error").text("A group's title cannot be empty").show();
+        return;
+    }
+    
+    for (var i = 0; i < groups.length; i++) {
+        if (group.title === groups[i].title) {
+            $("#groupDialog .alert-error").text("A group with this title already exists").show();
+            return;
+        }
+    }
+    
+    // Send the new group to the back-end.
+    var request = new XMLHttpRequest();
+    request.open("POST", BASE_URL + "/groups");
+    request.onload = function() {
+        if (request.status === 201) {
+            group.id = request.getResponseHeader("Location").split("/").pop();
+            groups.push(group);
+            $("#groupList").append(createListElementForGroup(groups.length - 1));
+            selectGroupAndLoadReminders(groups.length - 1);
+            $(".reminderDialogToggle").attr("disabled", false);
+            $("#groupDialog").modal("hide");
+        } else {
+            $("#groupDialog .alert-error").text("Error creating group. See the console for more information.").show();
+            console.log("Error creating group: " + request.status + " " + request.responseText);
+        }
+    };
+    request.setRequestHeader("Content-Type", "application/json");
+    request.send(JSON.stringify(group));
+}
+
+function updateGroupWithInput() {
+    
+    var group = jQuery.extend(true, {}, groups[selectedGroupIndex]);
+    group.title = jQuery.trim($("#groupTitle").val());
+    
+    if (group.title.length < 1) {
+        $("#groupDialog .alert-error").text("A group's title cannot be empty").show();
+        return;
+    }
+    
+    for (var i = 0; i < groups.length; i++) {
+        if (i !== selectedGroupIndex && group.title === groups[i].title) {
+            $("#groupDialog .alert-error").text("A group with this title already exists").show();
+            return;
+        }
+    }
+
+    // Send the updated group to the back-end.
+    var request = new XMLHttpRequest();
+    request.open("PUT", BASE_URL + "/groups/" + group.id);
+    request.onload = function() {
+        if (request.status === 204) {
+            groups.splice(selectedGroupIndex, 1, group);
+            var oldElement = $("#groupList li")[selectedGroupIndex];
+            $(oldElement).replaceWith(createListElementForGroup(selectedGroupIndex));
+            var newElement = $("#groupList li")[selectedGroupIndex];
+            $(newElement).addClass("active");
+            $(".icon-edit", newElement).show();
+            $("#groupDialog").modal("hide");
+        } else {
+            $("#groupDialog .alert-error").text("Error creating group. See the console for more information.").show();
+            console.log("Error creating group: " + request.status + " " + request.responseText);
+        }
+    };
+    request.setRequestHeader("Content-Type", "application/json");
+    request.send(JSON.stringify(group));
+}
+
+function deleteSelectedGroup() {
+    
+    // Send a delete request to the back-end.
+    var request = new XMLHttpRequest();
+    request.open("DELETE", BASE_URL + "/groups/" + groups[selectedGroupIndex].id);
+    request.onload = function() {
+        if (request.status === 204) {
+            groups.splice(selectedGroupIndex, 1);
+            
+            // Rebuild the group list (otherwise the indices used in the list elements are off).
+            $("#groupList").empty();
+            for (var i = 0; i < groups.length; i++) {
+                $("#groupList").append(createListElementForGroup(i));
+            }
+            
+            if (selectedGroupIndex > 0) {
+                selectGroupAndLoadReminders(selectedGroupIndex - 1);
+            } else if (groups.length > 0) {
+                selectGroupAndLoadReminders(0);
+            } else {
+                selectedGroupIndex = undefined;
+                $(".reminderDialogToggle").attr("disabled", true);
+            }
+            $("#groupDialog").modal("hide");
+        } else {
+            console.log("Error deleting group: " + request.status + " - " + request.statusText);
+        }
+    };
+    request.send(null);
+}
+

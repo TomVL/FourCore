@@ -32,6 +32,7 @@ Do the following if you're using your customized build of modernizr (http://www.
 
 <script src="respond.min.js"></script>
 <script src="javascriptje2.js"></script>
+<script src="JavaScriptCode.js"></script>
 
 </head>
 <!--AIzaSyCjEo17JpqymdjvqU2e11hQm2BGkI1I6eg-->
@@ -64,7 +65,7 @@ Do the following if you're using your customized build of modernizr (http://www.
         <td class="tdtext">Situatie ongeval</td>
       </tr>
       <tr>
-        <td>&nbsp;</td>
+        <td id="eventId"></td>
         <td>&nbsp;</td>
       </tr>
       <tr>
@@ -76,12 +77,14 @@ Do the following if you're using your customized build of modernizr (http://www.
         <td>&nbsp;</td>
       </tr>
     </table>
+        
   </div>
   <div id="bottom-bar">
     <input id="autocomplete" name="auto" type="text" placeholder="Geef locatie" autocomplete="on">
     </div>
   <div id="mapcanvas"></div>
-
+<div id="eventId">
+        </div>
 <!-- Start dropUpMenu -->
 <div id="dropUpMenu">
 <ul id="css3menu1" class="topmenu">
